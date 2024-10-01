@@ -20,8 +20,9 @@ class TweetFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'tweet' => $this->faker->text(200),
+            'user_id' => User::factory(),  // UserモデルのFactoryを使用してユーザを生成
+            'tweet' => $this->faker->text(200), // ダミーのテキストデータ
+
         ];
     }
 }

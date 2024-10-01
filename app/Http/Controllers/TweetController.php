@@ -12,7 +12,8 @@ class TweetController extends Controller
      */
     public function index()
     {
-        $tweets = Tweet::with('user')->latest()->get();
+        $tweets = Tweet::with(['user', 'liked'])->latest()->get();
+        // dd($tweets);
         return view('tweets.index', compact('tweets'));
     }
 
@@ -30,7 +31,7 @@ class TweetController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'tweet' => 'required|max:255',
+            'tweet' => 'required|max:255',
         ]);
 
         $request->user()->tweets()->create($request->only('tweet'));
@@ -43,6 +44,7 @@ class TweetController extends Controller
      */
     public function show(Tweet $tweet)
     {
+        $tweet->load('comments');
         return view('tweets.show', compact('tweet'));
     }
 
@@ -60,7 +62,7 @@ class TweetController extends Controller
     public function update(Request $request, Tweet $tweet)
     {
         $request->validate([
-        'tweet' => 'required|max:255',
+            'tweet' => 'required|max:255',
         ]);
 
         $tweet->update($request->only('tweet'));
@@ -76,5 +78,30 @@ class TweetController extends Controller
         $tweet->delete();
 
         return redirect()->route('tweets.index');
+    }
+
+    /**
+     * Search for tweets containing the keyword.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function search(Request $request)
+    {
+
+        $query = Tweet::query();
+
+        // キーワードが指定されている場合のみ検索を実行
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where('tweet', 'like', '%' . $keyword . '%');
+        }
+
+        // ページネーションを追加（1ページに10件表示）
+        $tweets = $query
+            ->latest()
+            ->paginate(10);
+
+        return view('tweets.search', compact('tweets'));
     }
 }
