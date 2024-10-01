@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mbti_type',
     ];
 
     /**
@@ -68,5 +69,17 @@ class User extends Authenticatable
     public function followers()
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'follow_id');
+    }
+
+    // ユーザーは1つのMBTIタイプを持つ
+    public function mbtiType()
+    {
+        return $this->hasOne(MBTIType::class);
+    }
+
+    // ユーザーは複数の花を選ぶ (多対多リレーション)
+    public function flowers()
+    {
+        return $this->belongsToMany(Flower::class)->withTimestamps();
     }
 }
