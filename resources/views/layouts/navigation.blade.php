@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('profile.show', auth()->user())" :active="request()->routeIs('profile.show')">
                         {{ __('マイページ') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('select.flowers')" :active="request()->routeIs('select.flowers')">
+                        {{ __('花を選ぶ') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -94,6 +97,9 @@
             <x-responsive-nav-link :href="route('profile.show', auth()->user())" :active="request()->routeIs('profile.show')">
                 {{ __('マイページ') }}
             </x-responsive-nav-link>
+            <x-nav-link :href="route('select.flowers')" :active="request()->routeIs('select.flowers')">
+                {{ __('花を選ぶ') }}
+            </x-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
