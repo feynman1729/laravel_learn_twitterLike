@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/follow/{user}', [FollowController::class, 'store'])->name('follow.store');
     Route::delete('/follow/{user}', [FollowController::class, 'destroy'])->name('follow.destroy');
     Route::get('/select-flowers', [FlowerController::class, 'showFlowerSelection'])->name('select.flowers');
+    Route::post('/select-flowers', [FlowerController::class, 'storeFlowerSelection'])->name('store.flowers');
 });
 
 require __DIR__.'/auth.php';

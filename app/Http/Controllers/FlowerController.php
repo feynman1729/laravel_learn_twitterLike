@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Flower;  // Flowerモデルを使うためにインポート
+use App\Models\Flower;
 use Illuminate\Http\Request;
 
 class FlowerController extends Controller
@@ -17,7 +17,7 @@ class FlowerController extends Controller
         return view('flowers.select', compact('flowers'));
     }
 
-     // 花の選択処理
+    // 花の選択処理
     public function storeFlowerSelection(Request $request)
     {
         // 花を3つ選んだか確認
@@ -25,13 +25,14 @@ class FlowerController extends Controller
             'flowers' => 'required|array|size:3',
         ]);
 
-        $selectedFlowers = $request->input('flowers');
+        // ユーザーが選んだ花のIDを取得
+        $flowerIds = $request->input('flowers');
+        
+        // ユーザーと花の関連付けを保存
+        $user = auth()->user();
+        $user->flowers()->sync($flowerIds);  // 選択した花をユーザーに紐づける
 
-        // 選択された花を元にMBTI診断ロジックを適用（前述のMBTI診断処理）
-        // ここで選択された3つの花の情報を使ってMBTIを計算
-        // $mbti = ...;
-
-        // 結果を表示するか、次のステップへ遷移
-        return redirect()->route('mbti.result', ['mbti' => $mbti]);
+        // 成功メッセージや次のステップにリダイレクト
+        return redirect()->route('profile.show', $user)->with('success', '花の選択が完了しました。');
     }
 }
