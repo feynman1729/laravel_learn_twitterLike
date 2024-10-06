@@ -5,45 +5,51 @@ namespace App\Http\Controllers;
 use App\Models\Flower; // Flowerモデルをインポート
 use App\Http\Services\FlowerMBTIDecider;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FlowerController extends Controller
 {
     // 花の選択画面を表示
     public function showFlowerSelection()
     {
-        // データベースから全ての花を取得 (例: Flowerモデルから取得)
+        // ログイン中のユーザーを取得
+        $user = Auth::user();
+
+        // ユーザーが選択した花を取得
+        $selectedFlowers = $user->flowers;
+
+        // 花が3つ以上選択されている場合は選択済みとみなす
+        if ($selectedFlowers->count() >= 3) {
+            return view('flowers.select', ['selected' => true]);
+        }
+
+        // ユーザーがまだ花を選んでいない場合、全ての花を取得して表示
         $flowers = Flower::all();
 
-        // flowersをビューに渡す
-        return view('flowers.select', compact('flowers'));
+        return view('flowers.select', [
+            'flowers' => $flowers,
+            'selected' => false,
+        ]);
     }
 
-    // 花の選択結果を保存するメソッド (storeメソッドとして追加)
     public function store(Request $request)
     {
-        // 花を3つ選んだか確認
+        // バリデーション: 3つの花が選ばれているか確認
         $validated = $request->validate([
             'flowers' => 'required|array|size:3',
         ]);
 
-        // ユーザーが選んだ花のIDを取得
-        $flowerIds = $request->input('flowers');
-
-        // CSVファイルから花のMBTIデータを取得する
-        $flowerData = $this->getFlowerDataFromCSV();
-
-        // データが読み込めなかった場合の処理
-        if (empty($flowerData)) {
-            return redirect()->back()->with('error', 'MBTIデータの読み込みに失敗しました');
-        }
-
-        // FlowerMBTIDeciderにデータを渡す
+        // FlowerMBTIDeciderのインスタンスを作成し、MBTIを決定
         $mbtiDecider = new FlowerMBTIDecider();
-        $mbtiResult = $mbtiDecider->decideMBTI($flowerIds, $flowerData);
+        
+        // FlowerDeciderを使ってCSVデータを取得し、選んだ花IDを基にMBTIタイプを決定
+        $flowerIds = $request->input('flowers');
+        $mbtiResult = $mbtiDecider->decideMBTI($flowerIds); // getFlowerDataFromCSVは内部で呼び出されます
 
-        // MBTI結果をセッションに保存して診断結果ページにリダイレクト
-        return redirect()->route('flower.result')->with('mbtiResult', $mbtiResult);
+        // セッションにMBTI結果を保存し、同じページにリダイレクト
+        return redirect()->back()->with('mbtiResult', $mbtiResult);
     }
+
 
     // 診断結果を表示するメソッド
     public function showFlowerResult(Request $request)

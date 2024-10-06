@@ -5,10 +5,19 @@
     </h2>
     </x-slot>
 
-    <div style="padding: 20px;"></div>
+    <div style="padding: 10px;"></div>
+
+    <!-- 結果表示エリア -->
+    @if (session('mbtiResult'))
+    <div id="result" style="margin-top: 30px; text-align: center;">
+        <h3>あなたのMBTIタイプは: <strong>{{ session('mbtiResult') }}</strong></h3>
+    </div>
+    @endif
+    
+    <div style="padding: 10px;"></div>
 
     <div class="container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <form id="flower-selection-form">
+        <form action="{{ route('store.flowers') }}" method="POST">
             @csrf
             <!-- 4列表示、中央寄せ -->
             <div class="row" style="display: flex; flex-wrap: wrap; justify-content: center;">
@@ -33,11 +42,6 @@
         </form>
     </div>
 
-    <!-- 結果表示エリア -->
-    <div id="result" style="margin-top: 30px; text-align: center;">
-        <!-- MBTI結果がここに表示されます -->
-    </div>
-
     <!-- CSS: 画像が選択されたときのスタイル -->
     <style>
         .flower-image {
@@ -55,13 +59,11 @@
         }
     </style>
 
-    <!-- JavaScript: 画像のクリックで選択・解除、および結果表示 -->
+    <!-- JavaScript: 画像のクリックで選択・解除 -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const flowerImages = document.querySelectorAll('.flower-image');
             const maxSelection = 3;
-            const form = document.getElementById('flower-selection-form');
-            const resultDiv = document.getElementById('result');
 
             flowerImages.forEach(function (img) {
                 img.addEventListener('click', function () {
@@ -82,5 +84,6 @@
                     }
                 });
             });
+        });
     </script>
 </x-app-layout>

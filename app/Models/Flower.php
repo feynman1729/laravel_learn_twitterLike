@@ -9,16 +9,8 @@ class Flower extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 
-        'symbol', 
-        'personality', 
-        'mbti_type',
-        'sensing_intuition',
-        'thinking_feeling',
-        'extroversion_introversion',
-        'judging_perceiving',
-    ];
+    // フィールドがIDのみで管理されるため、$fillableは空の配列または省略可能です。
+    protected $fillable = [];
 
     // Flowerは複数のユーザーに属する (多対多リレーション)
     public function users()
