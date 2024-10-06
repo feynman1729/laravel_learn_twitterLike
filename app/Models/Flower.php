@@ -25,4 +25,10 @@ class Flower extends Model
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
+
+    // 選択された3つの花を取得するメソッド
+    public static function getSelectedFlowers($flowerIds)
+    {
+        return self::whereIn('id', $flowerIds)->get();
+    }
 }

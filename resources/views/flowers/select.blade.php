@@ -1,25 +1,27 @@
 <x-app-layout>
-    <div class="container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-        <!-- フォントサイズを大きくして中央寄せ -->
-        <h1 style="font-size: 2rem; font-weight: bold; text-align: center;">好きな花を3つ選んでください</h1>
+    <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        {{ __('3種類の花を選択してください🥰') }}
+    </h2>
+    </x-slot>
 
-        <form action="/flower-result" method="POST" id="flower-selection-form">
+    <div style="padding: 20px;"></div>
+
+    <div class="container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
+        <form id="flower-selection-form">
             @csrf
             <!-- 4列表示、中央寄せ -->
             <div class="row" style="display: flex; flex-wrap: wrap; justify-content: center;">
                 @for ($i = 1; $i <= 64; $i++)
                     <div class="col-md-3 col-sm-6 mb-4" style="flex: 0 0 25%; max-width: 25%; text-align: center;">
                         <div class="flower-item text-center">
-                            <!-- 画像のファイル名を手動で表示 -->
                             <img 
                                 src="{{ asset('images/flowers/' . str_pad($i, 2, '0', STR_PAD_LEFT) . '.jpeg') }}" 
                                 alt="Flower {{ $i }}" 
                                 class="flower-image" 
                                 data-flower-id="{{ $i }}"
                                 style="width: 100%; height: auto; border: 2px solid transparent; cursor: pointer;">
-                            
-                            <input type="checkbox" name="flowers[]" value="{{ $i }}" class="flower-checkbox" id="flower{{ $i }}" hidden>
-                            
+                            <input name="flowers[]" value="{{ $i }}" class="flower-checkbox" id="flower{{ $i }}" hidden>
                             <label for="flower{{ $i }}" class="flower-label">
                                 Flower {{ $i }}
                             </label>
@@ -27,10 +29,13 @@
                     </div>
                 @endfor
             </div>
-
-            <!-- ボタンのフォントサイズを大きくして中央寄せ -->
             <button type="submit" class="btn btn-primary mt-3" style="font-size: 1.5rem; margin-top: 20px;">選択を完了</button>
         </form>
+    </div>
+
+    <!-- 結果表示エリア -->
+    <div id="result" style="margin-top: 30px; text-align: center;">
+        <!-- MBTI結果がここに表示されます -->
     </div>
 
     <!-- CSS: 画像が選択されたときのスタイル -->
@@ -50,11 +55,13 @@
         }
     </style>
 
-    <!-- JavaScript: 画像のクリックで選択・解除 -->
+    <!-- JavaScript: 画像のクリックで選択・解除、および結果表示 -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const flowerImages = document.querySelectorAll('.flower-image');
             const maxSelection = 3;
+            const form = document.getElementById('flower-selection-form');
+            const resultDiv = document.getElementById('result');
 
             flowerImages.forEach(function (img) {
                 img.addEventListener('click', function () {
@@ -75,6 +82,5 @@
                     }
                 });
             });
-        });
     </script>
 </x-app-layout>

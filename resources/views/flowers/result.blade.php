@@ -7,6 +7,7 @@
         <a href="{{ route('dashboard') }}" class="btn btn-primary">ダッシュボードに戻る</a>
     </div>
 
+    
     <style>
         .container {
             text-align: center;

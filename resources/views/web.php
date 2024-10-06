@@ -41,7 +41,6 @@ Route::middleware('auth')->group(function () {
     // 花の選択と結果表示に関するルート
     Route::get('/select-flowers', [FlowerController::class, 'showFlowerSelection'])->name('select.flowers');
     Route::post('/select-flowers', [FlowerController::class, 'store'])->name('store.flowers');
-    
 });
 
 require __DIR__.'/auth.php';

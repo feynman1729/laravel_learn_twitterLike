@@ -11,9 +11,12 @@ class MBTIType extends Model
 
     protected $fillable = ['type'];
 
-    // MBTIタイプは1人のユーザーに属する
+    // MBTIタイプは多数のユーザーに属する
     public function user()
     {
-        return $this->belongsTo(User::class);
+        // return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
+
+    
 }

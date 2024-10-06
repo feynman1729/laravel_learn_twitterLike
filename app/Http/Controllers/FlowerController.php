@@ -18,40 +18,6 @@ class FlowerController extends Controller
         return view('flowers.select', compact('flowers'));
     }
 
-    // CSVからデータを読み込むメソッド
-    private function getFlowerDataFromCSV()
-    {
-        // CSVファイルのパスを指定
-        $filePath = storage_path('app/data/MBTI_Flower_Data.csv');
-        $flowerData = [];
-
-        // CSVファイルが存在するか確認
-        if (file_exists($filePath)) {
-            // CSVファイルを開く
-            if (($handle = fopen($filePath, 'r')) !== false) {
-                // ヘッダーをスキップ
-                $header = fgetcsv($handle, 1000, ',');
-
-                // CSVファイルを1行ずつ読み込む
-                while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-                    // 各行のデータを花IDに基づいて保存
-                    $flowerData[$data[0]] = [
-                        '感覚-直感' => (int)$data[1],
-                        '思考-感情' => (int)$data[2],
-                        '外向-内向' => (int)$data[3],
-                        '判断-知覚' => (int)$data[4],
-                    ];
-                }
-                fclose($handle);
-            }
-        } else {
-            // ファイルが存在しない場合、エラーログを出力
-            \Log::error("CSVファイルが見つかりません: $filePath");
-        }
-
-        return $flowerData;
-    }
-
     // 花の選択結果を保存するメソッド (storeメソッドとして追加)
     public function store(Request $request)
     {
