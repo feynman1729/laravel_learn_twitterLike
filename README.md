@@ -64,3 +64,39 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# データエンジニアカタパルト Phase01 課題
+
+## 挑戦した課題
+
+[✅] 初級
+
+[] 上級
+
+## 実装した内容
+サインアップ時に64種類の花の内、3種類を選び、それらの花を基にMBTIのタイプをユーザーに表示させ、MBTIのタイプごとにユーザーを分けるSNSの作成
+64種類の花の情報：https://freezing-crocus-633.notion.site/flowers_mbti-csv-10e27629cdd780b698afe709eda6f078
+
+## デプロイ先の URL または画面収録したファイル名
+
+
+## 使い方
+
+1. サインアップ時に64種類の花の内、3種類の花を選ぶ
+
+2. 3種類の花の中から、ユーザーのMBTIのタイプを表示する（画面遷移の処理で詰まってしまった）
+
+3. MBTIのタイプごとの投稿やユーザーを表示する（未実装）
+
+...
+
+## 工夫した点
+64種類の花ごとにMBTIの特性を設定し、3つの花のうち最も近いMBTIのタイプを決定するロジックを組み立てた。
+
+## 苦戦した点
+2. 3.のフェーズがうまくいかなかった。詳しくは「64種類の花の情報」のURLにて閲覧可能
+
+## Phase01 終えての感想
+学習した内容をしっかり理解できたつもりだったが、振り返ってみるとテストの有効活用ができていなかったり、画面遷移の処理で詰まるという初歩的な部分でつまずいてしまったり、
+MBTIのタイプごとの投稿やユーザーを表示するというデータベースの処理を扱うG's Academyにとって中核となる部分を作成できなかったのが悔しかった。
+歯がゆい気持ちでいっぱいなので提出後も引き続きこのプロダクトの開発を行う。
